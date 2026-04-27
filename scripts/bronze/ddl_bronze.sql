@@ -1,78 +1,51 @@
-IF OBJECT_ID('bronze.crm_cust_info', 'U') IS NOT NULL
-    DROP TABLE bronze.crm_cust_info;
+IF OBJECT_ID('bronze.accounts', 'U') IS NOT NULL
+    DROP TABLE bronze.accounts;
 GO
 
-CREATE TABLE bronze.crm_cust_info (
-    cst_id              INT,
-    cst_key             NVARCHAR(50),
-    cst_firstname       NVARCHAR(50),
-    cst_lastname        NVARCHAR(50),
-    cst_marital_status  NVARCHAR(50),
-    cst_gndr            NVARCHAR(50),
-    cst_create_date     DATE
+CREATE TABLE bronze.accounts (
+	account NVARCHAR(50),
+	sector NVARCHAR(50),
+	year_established INT,
+	revenue DECIMAL(10,2),
+	employees INT,
+	office_location NVARCHAR(50),
+	subsidiary_of NVARCHAR(50)
 );
 GO
 
-IF OBJECT_ID('bronze.crm_prd_info', 'U') IS NOT NULL
-    DROP TABLE bronze.crm_prd_info;
+IF OBJECT_ID('bronze.products', 'U') IS NOT NULL
+    DROP TABLE bronze.products;
 GO
 
-CREATE TABLE bronze.crm_prd_info (
-    prd_id       INT,
-    prd_key      NVARCHAR(50),
-    prd_nm       NVARCHAR(50),
-    prd_cost     INT,
-    prd_line     NVARCHAR(50),
-    prd_start_dt DATETIME,
-    prd_end_dt   DATETIME
+CREATE TABLE bronze.products (
+	prod NVARCHAR(50),
+	series NVARCHAR(50),
+	sales_price INT
 );
 GO
 
-IF OBJECT_ID('bronze.crm_sales_details', 'U') IS NOT NULL
-    DROP TABLE bronze.crm_sales_details;
+IF OBJECT_ID('bronze.sales_pipeline', 'U') IS NOT NULL
+    DROP TABLE bronze.sales_pipeline;
 GO
 
-CREATE TABLE bronze.crm_sales_details (
-    sls_ord_num  NVARCHAR(50),
-    sls_prd_key  NVARCHAR(50),
-    sls_cust_id  INT,
-    sls_order_dt INT,
-    sls_ship_dt  INT,
-    sls_due_dt   INT,
-    sls_sales    INT,
-    sls_quantity INT,
-    sls_price    INT
+CREATE TABLE bronze.sales_pipeline (
+	opportunity_id NVARCHAR(50),
+	sales_agent NVARCHAR(50),
+	prod NVARCHAR(50),
+	account NVARCHAR(50),
+	deal_stage NVARCHAR(50),
+	engage_date DATETIME,
+	close_date DATETIME,
+	close_value INT
 );
 GO
 
-IF OBJECT_ID('bronze.erp_loc_a101', 'U') IS NOT NULL
-    DROP TABLE bronze.erp_loc_a101;
+IF OBJECT_ID('bronze.sales_teams', 'U') IS NOT NULL
+    DROP TABLE bronze.sales_teams;
 GO
 
-CREATE TABLE bronze.erp_loc_a101 (
-    cid    NVARCHAR(50),
-    cntry  NVARCHAR(50)
-);
-GO
-
-IF OBJECT_ID('bronze.erp_cust_az12', 'U') IS NOT NULL
-    DROP TABLE bronze.erp_cust_az12;
-GO
-
-CREATE TABLE bronze.erp_cust_az12 (
-    cid    NVARCHAR(50),
-    bdate  DATE,
-    gen    NVARCHAR(50)
-);
-GO
-
-IF OBJECT_ID('bronze.erp_px_cat_g1v2', 'U') IS NOT NULL
-    DROP TABLE bronze.erp_px_cat_g1v2;
-GO
-
-CREATE TABLE bronze.erp_px_cat_g1v2 (
-    id           NVARCHAR(50),
-    cat          NVARCHAR(50),
-    subcat       NVARCHAR(50),
-    maintenance  NVARCHAR(50)
+CREATE TABLE bronze.sales_teams (
+	sales_agent NVARCHAR(50),
+	manager NVARCHAR(50),
+	regional_office NVARCHAR(50)
 );
