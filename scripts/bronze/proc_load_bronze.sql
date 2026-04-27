@@ -1,3 +1,6 @@
+-- The following script creates a stored procedure to bulk insert the data into appropriate tables
+-- Caution: The script uses 'Truncate & Insert' logic, so the previous data will be lost when running the script 
+
 CREATE OR ALTER PROCEDURE bronze.load_bronze AS
 BEGIN
 	DECLARE @start_time DATETIME, @end_time DATETIME, @start_bronze_time DATETIME, @end_bronze_time DATETIME;
@@ -9,16 +12,12 @@ BEGIN
 		PRINT 'Loading Bronze Layer';
 		PRINT '===============================================';
 
-		PRINT '-----------------------------------------------';
-		PRINT 'Loading CRM Tables';
-		PRINT '-----------------------------------------------';
-
 		SET @start_time = GETDATE();
-		PRINT '>> Truncating Table: bronze.crm_cust_info';
-		TRUNCATE TABLE bronze.crm_cust_info;
-		PRINT '>> Inserting Data Into: bronze.crm_cust_info';
-		BULK INSERT bronze.crm_cust_info
-		FROM 'E:\AI-ML-Data Projects\SQL Data Warehouse Project\sql-data-warehouse-project\datasets\source_crm\cust_info.csv'
+		PRINT '>> Truncating Table: bronze.accounts';
+		TRUNCATE TABLE bronze.accounts;
+		PRINT '>> Inserting Data Into: bronze.accounts';
+		BULK INSERT bronze.accounts
+		FROM 'E:\AI-ML-Data Projects\SQL Data Warehouse Project\SQL Data Warehouse\datasets\accounts.csv'
 		WITH (
 			FIRSTROW = 2,
 			FIELDTERMINATOR = ',',
@@ -29,11 +28,11 @@ BEGIN
 		PRINT '---------';
 
 		SET @start_time = GETDATE();
-		PRINT '>> Truncating Table: bronze.crm_prd_info';
-		TRUNCATE TABLE bronze.crm_prd_info;
-		PRINT '>> Inserting Data Into: bronze.crm_prd_info';
-		BULK INSERT bronze.crm_prd_info
-		FROM 'E:\AI-ML-Data Projects\SQL Data Warehouse Project\sql-data-warehouse-project\datasets\source_crm\prd_info.csv'
+		PRINT '>> Truncating Table: bronze.products';
+		TRUNCATE TABLE bronze.products;
+		PRINT '>> Inserting Data Into: bronze.products';
+		BULK INSERT bronze.products
+		FROM 'E:\AI-ML-Data Projects\SQL Data Warehouse Project\SQL Data Warehouse\datasets\products.csv'
 		WITH (
 			FIRSTROW = 2,
 			FIELDTERMINATOR = ',',
@@ -44,31 +43,11 @@ BEGIN
 		PRINT '---------';
 
 		SET @start_time = GETDATE();
-		PRINT '>> Truncating Table: bronze.crm_sales_details';
-		TRUNCATE TABLE bronze.crm_sales_details;
-		PRINT '>> Inserting Data Into: bronze.crm_sales_details';
-		BULK INSERT bronze.crm_sales_details
-		FROM 'E:\AI-ML-Data Projects\SQL Data Warehouse Project\sql-data-warehouse-project\datasets\source_crm\sales_details.csv'
-		WITH (
-			FIRSTROW = 2,
-			FIELDTERMINATOR = ',',
-			TABLOCK
-		);
-		SET @end_time = GETDATE();
-		PRINT '>> Load Duration: ' + CAST (DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds';
-		PRINT '---------';
-		
-
-		PRINT '-----------------------------------------------';
-		PRINT 'Loading ERP Tables';
-		PRINT '-----------------------------------------------';
-
-		SET @start_time = GETDATE();
-		PRINT '>> Truncating Table: bronze.erp_cust_az12';
-		TRUNCATE TABLE bronze.erp_cust_az12;
-		PRINT '>> Inserting Data Into: bronze.erp_cust_az12';
-		BULK INSERT bronze.erp_cust_az12
-		FROM 'E:\AI-ML-Data Projects\SQL Data Warehouse Project\sql-data-warehouse-project\datasets\source_erp\CUST_AZ12.csv'
+		PRINT '>> Truncating Table: bronze.sales_pipeline';
+		TRUNCATE TABLE bronze.sales_pipeline;
+		PRINT '>> Inserting Data Into: bronze.sales_pipeline';
+		BULK INSERT bronze.sales_pipeline
+		FROM 'E:\AI-ML-Data Projects\SQL Data Warehouse Project\SQL Data Warehouse\datasets\sales_pipeline.csv'
 		WITH (
 			FIRSTROW = 2,
 			FIELDTERMINATOR = ',',
@@ -79,11 +58,11 @@ BEGIN
 		PRINT '---------';
 
 		SET @start_time = GETDATE();
-		PRINT '>> Truncating Table: bronze.erp_loc_A101';
-		TRUNCATE TABLE bronze.erp_loc_A101;
-		PRINT '>> Inserting Data Into: bronze.erp_loc_A101';
-		BULK INSERT bronze.erp_loc_A101
-		FROM 'E:\AI-ML-Data Projects\SQL Data Warehouse Project\sql-data-warehouse-project\datasets\source_erp\LOC_A101.csv'
+		PRINT '>> Truncating Table: bronze.sales_teams';
+		TRUNCATE TABLE bronze.sales_teams;
+		PRINT '>> Inserting Data Into: bronze.sales_teams';
+		BULK INSERT bronze.sales_teams
+		FROM 'E:\AI-ML-Data Projects\SQL Data Warehouse Project\SQL Data Warehouse\datasets\sales_teams.csv'
 		WITH (
 			FIRSTROW = 2,
 			FIELDTERMINATOR = ',',
@@ -92,23 +71,6 @@ BEGIN
 		SET @end_time = GETDATE();
 		PRINT '>> Load Duration: ' + CAST (DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds';
 		PRINT '---------';
-
-		SET @start_time = GETDATE();
-		PRINT '>> Truncating Table: bronze.erp_px_cat_g1v2';
-		TRUNCATE TABLE bronze.erp_px_cat_g1v2;
-		PRINT '>> Inserting Data Into: bronze.erp_px_cat_g1v2';
-		BULK INSERT bronze.erp_px_cat_g1v2
-		FROM 'E:\AI-ML-Data Projects\SQL Data Warehouse Project\sql-data-warehouse-project\datasets\source_erp\PX_CAT_G1V2.csv'
-		WITH (
-			FIRSTROW = 2,
-			FIELDTERMINATOR = ',',
-			TABLOCK
-		);
-		SET @end_time = GETDATE();
-		PRINT '>> Load Duration: ' + CAST (DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds';
-		PRINT '---------';
-
-		SET @end_bronze_time = GETDATE();
 		PRINT '===============================================';
 		PRINT '>> Bronze Layer Loaded In: ' + CAST (DATEDIFF(second, @start_bronze_time, @end_bronze_time) AS NVARCHAR) + ' seconds';
 		PRINT '===============================================';
@@ -123,3 +85,7 @@ BEGIN
 		PRINT '===============================================';
 	END CATCH
 END
+
+
+-- Run the below for executing the procedure
+EXEC bronze.load_bronze;
